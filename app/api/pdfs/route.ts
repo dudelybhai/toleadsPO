@@ -28,6 +28,12 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch {
-    return NextResponse.json({ error: "PDF not found." }, { status: 404 });
+    return NextResponse.json(
+      {
+        error:
+          "PDF source files are not included in this deployment. Use the local Accounts folder."
+      },
+      { status: 404 }
+    );
   }
 }
