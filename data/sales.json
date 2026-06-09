@@ -1,0 +1,542 @@
+[
+  {
+    "id": "sale-0002",
+    "date": "2026-05-01",
+    "shift": "Day",
+    "amount": 1927.8,
+    "source": "CamScanner 02 05 2026 03 23",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-01T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0003",
+    "date": "2026-05-01",
+    "shift": "Night",
+    "amount": 1301.5,
+    "source": "CamScanner 03 05 2026 05 00",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-01T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0004",
+    "date": "2026-05-02",
+    "shift": "Day",
+    "amount": 1544.3,
+    "source": "CamScanner 03 05 2026 05 04",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-02T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0005",
+    "date": "2026-05-02",
+    "shift": "Night",
+    "amount": 1947,
+    "source": "CamScanner 04 05 2026 03 04",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-02T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0006",
+    "date": "2026-05-03",
+    "shift": "Day",
+    "amount": 2551.3,
+    "source": "CamScanner 04 05 2026 03 08",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-03T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0007",
+    "date": "2026-05-03",
+    "shift": "Night",
+    "amount": 1441.1,
+    "source": "CamScanner 05 05 2026 03 48",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-03T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0008",
+    "date": "2026-05-04",
+    "shift": "Day",
+    "amount": 1445.6,
+    "source": "CamScanner 05 05 2026 03 54",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-04T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0009",
+    "date": "2026-05-04",
+    "shift": "Night",
+    "amount": 1512.7,
+    "source": "CamScanner 06 05 2026 03 52",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-04T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0010",
+    "date": "2026-05-05",
+    "shift": "Day",
+    "amount": 1463,
+    "source": "CamScanner 06 05 2026 03 57",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-05T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0011",
+    "date": "2026-05-05",
+    "shift": "Night",
+    "amount": 1648.9,
+    "source": "CamScanner 07 05 2026 03 09",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-05T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0012",
+    "date": "2026-05-06",
+    "shift": "Day",
+    "amount": 1055.6,
+    "source": "CamScanner 07 05 2026 03 15",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-06T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0013",
+    "date": "2026-05-06",
+    "shift": "Night",
+    "amount": 1587.8,
+    "source": "CamScanner 08 05 2026 03 49",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-06T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0014",
+    "date": "2026-05-07",
+    "shift": "Day",
+    "amount": 1496.4,
+    "source": "CamScanner 08 05 2026 03 52",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-07T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0015",
+    "date": "2026-05-07",
+    "shift": "Night",
+    "amount": 1554.3,
+    "source": "CamScanner 09 05 2026 02 34",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-07T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0016",
+    "date": "2026-05-08",
+    "shift": "Day",
+    "amount": 1390.4,
+    "source": "CamScanner 09 05 2026 02 39",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-08T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0017",
+    "date": "2026-05-08",
+    "shift": "Night",
+    "amount": 1961.1,
+    "source": "CamScanner 10 05 2026 02 43",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-08T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0018",
+    "date": "2026-05-09",
+    "shift": "Day",
+    "amount": 1620.2,
+    "source": "CamScanner 10 05 2026 02 49",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-09T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0019",
+    "date": "2026-05-09",
+    "shift": "Night",
+    "amount": 2063,
+    "source": "CamScanner 11 05 2026 03 38",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-09T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0020",
+    "date": "2026-05-10",
+    "shift": "Day",
+    "amount": 3125.2,
+    "source": "CamScanner 11 05 2026 03 41",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-10T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0021",
+    "date": "2026-05-10",
+    "shift": "Night",
+    "amount": 1875.1,
+    "source": "CamScanner 12 05 2026 04 34",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-10T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0022",
+    "date": "2026-05-11",
+    "shift": "Day",
+    "amount": 1770,
+    "source": "CamScanner 12 05 2026 04 39",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-11T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0023",
+    "date": "2026-05-11",
+    "shift": "Night",
+    "amount": 1619.1,
+    "source": "CamScanner 12 05 2026 07 50",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-11T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0024",
+    "date": "2026-05-12",
+    "shift": "Day",
+    "amount": 1443.1,
+    "source": "CamScanner 13 05 2026 02 16",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-12T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0025",
+    "date": "2026-05-12",
+    "shift": "Night",
+    "amount": 1441.4,
+    "source": "CamScanner 14 05 2026 02 12",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-12T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0026",
+    "date": "2026-05-13",
+    "shift": "Day",
+    "amount": 1227.2,
+    "source": "CamScanner 14 05 2026 02 24",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-13T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0027",
+    "date": "2026-05-13",
+    "shift": "Night",
+    "amount": 1452,
+    "source": "CamScanner 15 05 2026 05 14",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-13T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0028",
+    "date": "2026-05-14",
+    "shift": "Day",
+    "amount": 1186.6,
+    "source": "CamScanner 15 05 2026 05 19",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-14T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0029",
+    "date": "2026-05-14",
+    "shift": "Night",
+    "amount": 1635.6,
+    "source": "CamScanner 16 05 2026 03 32",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-14T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0030",
+    "date": "2026-05-15",
+    "shift": "Day",
+    "amount": 1331,
+    "source": "CamScanner 16 05 2026 03 41",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-15T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0031",
+    "date": "2026-05-15",
+    "shift": "Night",
+    "amount": 1668.2,
+    "source": "CamScanner 17 05 2026 04 03",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-15T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0032",
+    "date": "2026-05-16",
+    "shift": "Day",
+    "amount": 1788.1,
+    "source": "CamScanner 17 05 2026 04 07",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-16T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0060",
+    "date": "2026-05-16",
+    "shift": "Night",
+    "amount": 1683.8,
+    "source": "DOC 20260518 WA0018",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-16T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0033",
+    "date": "2026-05-17",
+    "shift": "Day",
+    "amount": 3087.6,
+    "source": "CamScanner 18 05 2026 03 27",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-17T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0034",
+    "date": "2026-05-17",
+    "shift": "Night",
+    "amount": 1524.2,
+    "source": "CamScanner 19 05 2026 04 03",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-17T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0035",
+    "date": "2026-05-18",
+    "shift": "Day",
+    "amount": 1366.8,
+    "source": "CamScanner 19 05 2026 04 08",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-18T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0036",
+    "date": "2026-05-18",
+    "shift": "Night",
+    "amount": 1390.6,
+    "source": "CamScanner 20 05 2026 04 12",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-18T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0037",
+    "date": "2026-05-19",
+    "shift": "Day",
+    "amount": 1140.8,
+    "source": "CamScanner 20 05 2026 04 17",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-19T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0038",
+    "date": "2026-05-19",
+    "shift": "Night",
+    "amount": 1621,
+    "source": "CamScanner 21 05 2026 04 23",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-19T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0039",
+    "date": "2026-05-20",
+    "shift": "Day",
+    "amount": 1274.9,
+    "source": "CamScanner 21 05 2026 04 27",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-20T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0040",
+    "date": "2026-05-20",
+    "shift": "Night",
+    "amount": 1657.4,
+    "source": "CamScanner 22 05 2026 04 53",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-20T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0041",
+    "date": "2026-05-21",
+    "shift": "Day",
+    "amount": 1174.4,
+    "source": "CamScanner 22 05 2026 05 05",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-21T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0042",
+    "date": "2026-05-21",
+    "shift": "Night",
+    "amount": 1563.6,
+    "source": "CamScanner 23 05 2026 04 28",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-21T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0043",
+    "date": "2026-05-22",
+    "shift": "Day",
+    "amount": 1231.3,
+    "source": "CamScanner 23 05 2026 04 32",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-22T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0044",
+    "date": "2026-05-22",
+    "shift": "Night",
+    "amount": 1396,
+    "source": "CamScanner 24 05 2026 04 57",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-22T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0045",
+    "date": "2026-05-23",
+    "shift": "Day",
+    "amount": 1472.9,
+    "source": "CamScanner 24 05 2026 05 03",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-23T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0046",
+    "date": "2026-05-23",
+    "shift": "Night",
+    "amount": 1579.1,
+    "source": "CamScanner 25 05 2026 04 37",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-23T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0047",
+    "date": "2026-05-24",
+    "shift": "Day",
+    "amount": 2418.7,
+    "source": "CamScanner 25 05 2026 04 42",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-24T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0048",
+    "date": "2026-05-24",
+    "shift": "Night",
+    "amount": 1328.7,
+    "source": "CamScanner 26 05 2026 03 57",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-24T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0049",
+    "date": "2026-05-25",
+    "shift": "Day",
+    "amount": 1288.5,
+    "source": "CamScanner 26 05 2026 04 06",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-25T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0050",
+    "date": "2026-05-25",
+    "shift": "Night",
+    "amount": 1442.9,
+    "source": "CamScanner 28 05 2026 04 33",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-25T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0051",
+    "date": "2026-05-26",
+    "shift": "Day",
+    "amount": 1092.3,
+    "source": "CamScanner 28 05 2026 04 37",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-26T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0052",
+    "date": "2026-05-26",
+    "shift": "Night",
+    "amount": 1853.25,
+    "source": "CamScanner 28 05 2026 04 45",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-26T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0053",
+    "date": "2026-05-27",
+    "shift": "Day",
+    "amount": 2104.2,
+    "source": "CamScanner 28 05 2026 04 50",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-27T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0054",
+    "date": "2026-05-27",
+    "shift": "Night",
+    "amount": 1731.6,
+    "source": "CamScanner 29 05 2026 02 56",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-27T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0055",
+    "date": "2026-05-28",
+    "shift": "Day",
+    "amount": 1011,
+    "source": "CamScanner 29 05 2026 03 01",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-28T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0056",
+    "date": "2026-05-28",
+    "shift": "Night",
+    "amount": 1756.7,
+    "source": "CamScanner 30 05 2026 04 06",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-28T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0057",
+    "date": "2026-05-29",
+    "shift": "Day",
+    "amount": 1147.4,
+    "source": "CamScanner 30 05 2026 04 10",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-29T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0058",
+    "date": "2026-05-29",
+    "shift": "Night",
+    "amount": 1904.9,
+    "source": "CamScanner 31 05 2026 05 29",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-29T20:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0059",
+    "date": "2026-05-30",
+    "shift": "Day",
+    "amount": 1479.9,
+    "source": "CamScanner 31 05 2026 05 33",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-30T08:00:00.000+08:00"
+  },
+  {
+    "id": "sale-0001",
+    "date": "2026-05-30",
+    "shift": "Night",
+    "amount": 1849.1,
+    "source": "CamScanner 01 06 2026 03 39",
+    "remarks": "Sales Amount from printed shift report",
+    "createdAt": "2026-05-30T20:00:00.000+08:00"
+  }
+]

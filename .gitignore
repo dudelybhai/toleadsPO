@@ -1,0 +1,11 @@
+
+
+#Ignore insiders AI rules
+.github/instructions/codacy.instructions.md
+node_modules
+.next/
+.next-dev/
+.next-build/
+.DS_Store
+*.tsbuildinfo
+data/Data PDF/
