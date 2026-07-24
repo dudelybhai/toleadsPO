@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import {
   CategoryPieChart,
   DailyExpenseLineChart,
@@ -19,16 +22,15 @@ import {
   groupPaymentMethod,
   groupPurchaseByCategory,
   groupPurchaseByDate,
-  groupShiftExpenses,
-  initialPurchases,
-  initialSalaries,
-  initialSales
+  groupShiftExpenses
 } from "@/lib/data";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
+import type { PurchaseEntry, SalaryEntry, SalesEntry } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
-function getMonthlySummary() {
+function getMonthlySummary(purchases: PurchaseEntry[]) {
   const months = new Map<string, number>();
-  initialPurchases.forEach((purchase) => {
+  purchases.forEach((purchase) => {
     const month = purchase.date.slice(0, 7);
     months.set(month, (months.get(month) ?? 0) + purchase.amount);
   });
@@ -36,22 +38,60 @@ function getMonthlySummary() {
 }
 
 export default function ReportsPage() {
+  const [purchases, setPurchases] = useState<PurchaseEntry[]>([]);
+  const [salaries, setSalaries] = useState<SalaryEntry[]>([]);
+  const [sales, setSales] = useState<SalesEntry[]>([]);
+  useEffect(() => {
+    Promise.all([
+      apiRequest<ListResponse<PurchaseEntry & { supplierName: string }>>(
+        "/api/purchases?pageSize=200"
+      ),
+      apiRequest<ListResponse<SalaryEntry>>("/api/salaries?pageSize=200"),
+      apiRequest<ListResponse<SalesEntry>>("/api/sales?pageSize=200")
+    ])
+      .then(([purchaseData, salaryData, salesData]) => {
+        setPurchases(
+          purchaseData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            supplier: item.supplierName,
+            quantity: Number(item.quantity),
+            amount: Number(item.amount)
+          }))
+        );
+        setSalaries(
+          salaryData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        );
+        setSales(
+          salesData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        );
+      })
+      .catch((error) => console.error("Unable to load reports", error));
+  }, []);
   const metrics = getDashboardMetrics(
-    initialPurchases,
-    initialSalaries,
-    initialSales
+    purchases,
+    salaries,
+    sales
   );
-  const daily = groupPurchaseByDate(initialPurchases);
-  const monthly = getMonthlySummary();
+  const daily = groupPurchaseByDate(purchases);
+  const monthly = useMemo(() => getMonthlySummary(purchases), [purchases]);
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 xl:grid-cols-2">
-        <CategoryPieChart data={groupPurchaseByCategory(initialPurchases)} />
+        <CategoryPieChart data={groupPurchaseByCategory(purchases)} />
         <DailyExpenseLineChart data={daily} />
-        <PaymentBarChart data={groupPaymentMethod(initialPurchases)} />
+        <PaymentBarChart data={groupPaymentMethod(purchases)} />
         <ShiftExpenseChart
-          data={groupShiftExpenses(initialPurchases, initialSalaries)}
+          data={groupShiftExpenses(purchases, salaries)}
         />
       </div>
 
@@ -76,7 +116,7 @@ export default function ReportsPage() {
                     <TableCell>
                       <Badge variant="secondary">
                         {
-                          initialPurchases.filter(
+                          purchases.filter(
                             (purchase) => purchase.date === row.date
                           ).length
                         }

@@ -59,7 +59,9 @@ export function PurchaseFormDialog({
 
   useEffect(() => {
     if (purchase) {
-      const { id: _id, createdAt: _createdAt, ...values } = purchase;
+      const { id, createdAt, ...values } = purchase;
+      void id;
+      void createdAt;
       setForm(values);
     }
   }, [purchase, open]);

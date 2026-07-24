@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          String?   @default("accountant")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model AccountingPeriod {
+  id        String    @id @default(cuid())
+  name      String
+  startsAt  DateTime  @db.Date
+  endsAt    DateTime? @db.Date
+  isOpen    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  purchases Purchase[]
+  salaries  SalaryEntry[]
+  sales     SaleEntry[]
+  expenses  Expense[]
+
+  @@index([startsAt, endsAt])
+}
+
+model Supplier {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  phone     String?
+  email     String?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  purchases Purchase[]
+
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model ImportBatch {
+  id           String    @id @default(cuid())
+  filename     String
+  status       String    @default("PROCESSING")
+  purchaseRows Int       @default(0)
+  salaryRows   Int       @default(0)
+  salesRows    Int       @default(0)
+  errorRows    Int       @default(0)
+  errors       Json?
+  createdBy    String
+  createdAt    DateTime  @default(now())
+  completedAt  DateTime?
+
+  purchases Purchase[]
+  salaries  SalaryEntry[]
+  sales     SaleEntry[]
+  expenses  Expense[]
+
+  @@index([createdAt])
+}
+
+model Purchase {
+  id                 String           @id @default(cuid())
+  externalId         String?          @unique
+  date               DateTime         @db.Date
+  category           String
+  itemName           String
+  supplierName       String
+  quantity           Decimal          @db.Decimal(14, 3)
+  unit               String
+  amount             Decimal          @db.Decimal(14, 2)
+  paymentMethod      String
+  shift              String
+  remarks            String           @default("")
+  source             String           @default("MANUAL")
+  supplierId         String?
+  supplier           Supplier?        @relation(fields: [supplierId], references: [id])
+  accountingPeriodId String
+  accountingPeriod   AccountingPeriod @relation(fields: [accountingPeriodId], references: [id])
+  importBatchId      String?
+  importBatch        ImportBatch?     @relation(fields: [importBatchId], references: [id])
+  createdBy          String
+  updatedBy          String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  deletedAt          DateTime?
+
+  @@index([date])
+  @@index([supplierName])
+  @@index([category])
+  @@index([accountingPeriodId, date])
+  @@index([deletedAt])
+}
+
+model SalaryEntry {
+  id                 String           @id @default(cuid())
+  externalId         String?          @unique
+  date               DateTime         @db.Date
+  staffName          String
+  costType           String
+  amount             Decimal          @db.Decimal(14, 2)
+  paymentMethod      String
+  shift              String
+  remarks            String           @default("")
+  source             String           @default("MANUAL")
+  accountingPeriodId String
+  accountingPeriod   AccountingPeriod @relation(fields: [accountingPeriodId], references: [id])
+  importBatchId      String?
+  importBatch        ImportBatch?     @relation(fields: [importBatchId], references: [id])
+  createdBy          String
+  updatedBy          String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  deletedAt          DateTime?
+
+  @@index([date])
+  @@index([staffName])
+  @@index([accountingPeriodId, date])
+  @@index([deletedAt])
+}
+
+model SaleEntry {
+  id                 String           @id @default(cuid())
+  externalId         String?          @unique
+  date               DateTime         @db.Date
+  shift              String
+  amount             Decimal          @db.Decimal(14, 2)
+  source             String           @default("MANUAL")
+  remarks            String           @default("")
+  accountingPeriodId String
+  accountingPeriod   AccountingPeriod @relation(fields: [accountingPeriodId], references: [id])
+  importBatchId      String?
+  importBatch        ImportBatch?     @relation(fields: [importBatchId], references: [id])
+  createdBy          String
+  updatedBy          String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  deletedAt          DateTime?
+
+  @@index([date])
+  @@index([accountingPeriodId, date])
+  @@index([deletedAt])
+}
+
+model Expense {
+  id                 String           @id @default(cuid())
+  externalId         String?          @unique
+  date               DateTime         @db.Date
+  category           String
+  description        String
+  payee              String
+  amount             Decimal          @db.Decimal(14, 2)
+  paymentMethod      String
+  shift              String
+  remarks            String           @default("")
+  source             String           @default("MANUAL")
+  accountingPeriodId String
+  accountingPeriod   AccountingPeriod @relation(fields: [accountingPeriodId], references: [id])
+  importBatchId      String?
+  importBatch        ImportBatch?     @relation(fields: [importBatchId], references: [id])
+  createdBy          String
+  updatedBy          String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  deletedAt          DateTime?
+
+  @@index([date])
+  @@index([category])
+  @@index([accountingPeriodId, date])
+  @@index([deletedAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  action     String
+  actorId    String
+  before     Json?
+  after      Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId, createdAt])
+}

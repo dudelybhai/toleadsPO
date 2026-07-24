@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Banknote, CalendarDays, Moon, Sun } from "lucide-react";
 import { DailySalesLineChart } from "@/components/dashboard/charts";
 import { SummaryCard } from "@/components/dashboard/summary-card";
@@ -21,22 +21,39 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { groupSalesByDate, initialSales, sumBy } from "@/lib/data";
+import { groupSalesByDate, sumBy } from "@/lib/data";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
+import type { SalesEntry } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 const allShifts = "all";
 
 export default function SalesPage() {
+  const [sales, setSales] = useState<SalesEntry[]>([]);
   const [date, setDate] = useState("");
   const [shift, setShift] = useState(allShifts);
+  useEffect(() => {
+    apiRequest<ListResponse<SalesEntry>>("/api/sales?pageSize=200")
+      .then((data) =>
+        setSales(
+          data.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        )
+      )
+      .catch((error) => console.error("Unable to load sales", error));
+  }, []);
+
   const filteredSales = useMemo(
     () =>
-      initialSales.filter(
+      sales.filter(
         (sale) =>
           (!date || sale.date === date) &&
           (shift === allShifts || sale.shift === shift)
       ),
-    [date, shift]
+    [date, sales, shift]
   );
   const dailySales = groupSalesByDate(filteredSales);
   const totalSales = sumBy(filteredSales, (sale) => sale.amount);

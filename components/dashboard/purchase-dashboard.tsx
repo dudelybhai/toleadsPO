@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Edit, Search, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,18 +30,18 @@ import {
   groupPaymentMethod,
   groupPurchaseByCategory,
   groupPurchaseByDate,
-  groupShiftExpenses,
-  initialPurchases,
-  initialSalaries,
-  initialSales
+  groupShiftExpenses
 } from "@/lib/data";
 import {
   categories,
   paymentMethods,
   shiftTypes,
   type PurchaseEntry,
-  type PurchaseFilters
+  type PurchaseFilters,
+  type SalaryEntry,
+  type SalesEntry
 } from "@/lib/types";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { SummaryCard } from "@/components/dashboard/summary-card";
 import {
@@ -60,7 +60,9 @@ import {
 const all = "all";
 
 export function PurchaseDashboard({ compact = false }: { compact?: boolean }) {
-  const [purchases, setPurchases] = useState<PurchaseEntry[]>(initialPurchases);
+  const [purchases, setPurchases] = useState<PurchaseEntry[]>([]);
+  const [salaries, setSalaries] = useState<SalaryEntry[]>([]);
+  const [sales, setSales] = useState<SalesEntry[]>([]);
   const [filters, setFilters] = useState<PurchaseFilters>({
     date: "",
     category: "",
@@ -69,16 +71,52 @@ export function PurchaseDashboard({ compact = false }: { compact?: boolean }) {
     search: ""
   });
 
+  useEffect(() => {
+    Promise.all([
+      apiRequest<ListResponse<PurchaseEntry & { supplierName: string }>>(
+        "/api/purchases?pageSize=200"
+      ),
+      apiRequest<ListResponse<SalaryEntry>>("/api/salaries?pageSize=200"),
+      apiRequest<ListResponse<SalesEntry>>("/api/sales?pageSize=200")
+    ])
+      .then(([purchaseData, salaryData, salesData]) => {
+        setPurchases(
+          purchaseData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            supplier: item.supplierName,
+            quantity: Number(item.quantity),
+            amount: Number(item.amount)
+          }))
+        );
+        setSalaries(
+          salaryData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        );
+        setSales(
+          salesData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        );
+      })
+      .catch((error) => console.error("Unable to load dashboard data", error));
+  }, []);
+
   const filteredPurchases = useMemo(
     () => filterPurchases(purchases, filters),
     [purchases, filters]
   );
-  const relatedSalaries = initialSalaries.filter(
+  const relatedSalaries = salaries.filter(
     (salary) =>
       (!filters.date || salary.date === filters.date) &&
       (!filters.shift || salary.shift === filters.shift)
   );
-  const relatedSales = initialSales.filter(
+  const relatedSales = sales.filter(
     (sale) =>
       (!filters.date || sale.date === filters.date) &&
       (!filters.shift || sale.shift === filters.shift)
@@ -113,19 +151,46 @@ export function PurchaseDashboard({ compact = false }: { compact?: boolean }) {
     setFilters((current) => ({ ...current, [key]: value }));
   }
 
-  function savePurchase(entry: PurchaseEntry) {
+  async function savePurchase(entry: PurchaseEntry) {
+    const exists = purchases.some((purchase) => purchase.id === entry.id);
+    const saved = await apiRequest<PurchaseEntry & { supplierName: string }>(
+      exists ? `/api/purchases/${entry.id}` : "/api/purchases",
+      {
+        method: exists ? "PATCH" : "POST",
+        body: JSON.stringify({
+          date: entry.date,
+          category: entry.category,
+          itemName: entry.itemName,
+          supplier: entry.supplier,
+          quantity: entry.quantity,
+          unit: entry.unit,
+          amount: entry.amount,
+          paymentMethod: entry.paymentMethod,
+          shift: entry.shift,
+          remarks: entry.remarks,
+          source: "MANUAL"
+        })
+      }
+    );
+    const normalized: PurchaseEntry = {
+      ...saved,
+      date: apiDate(saved.date),
+      supplier: saved.supplierName,
+      quantity: Number(saved.quantity),
+      amount: Number(saved.amount)
+    };
     setPurchases((current) => {
-      const exists = current.some((purchase) => purchase.id === entry.id);
       if (exists) {
         return current.map((purchase) =>
-          purchase.id === entry.id ? entry : purchase
+          purchase.id === normalized.id ? normalized : purchase
         );
       }
-      return [entry, ...current];
+      return [normalized, ...current];
     });
   }
 
-  function deletePurchase(id: string) {
+  async function deletePurchase(id: string) {
+    await apiRequest<void>(`/api/purchases/${id}`, { method: "DELETE" });
     setPurchases((current) => current.filter((purchase) => purchase.id !== id));
   }
 
@@ -234,7 +299,7 @@ export function PurchaseDashboard({ compact = false }: { compact?: boolean }) {
           <DailyExpenseLineChart data={groupPurchaseByDate(filteredPurchases)} />
           <PaymentBarChart data={groupPaymentMethod(filteredPurchases)} />
           <ShiftExpenseChart
-            data={groupShiftExpenses(filteredPurchases, initialSalaries)}
+            data={groupShiftExpenses(filteredPurchases, salaries)}
           />
         </div>
       )}
@@ -244,7 +309,7 @@ export function PurchaseDashboard({ compact = false }: { compact?: boolean }) {
           <div>
             <CardTitle>Purchase Entry</CardTitle>
             <p className="mt-1 text-sm text-muted-foreground">
-              Add, edit, delete, search, and filter local purchase records.
+              Add, edit, delete, search, and filter stored purchase records.
             </p>
           </div>
           <PurchaseFormDialog onSave={savePurchase} />

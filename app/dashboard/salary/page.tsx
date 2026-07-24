@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Banknote, Plus, Users, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,8 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { SummaryCard } from "@/components/dashboard/summary-card";
-import { initialSalaries, sumBy } from "@/lib/data";
+import { sumBy } from "@/lib/data";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
 import {
   paymentMethods,
   shiftTypes,
@@ -51,9 +52,23 @@ const emptySalary: Omit<SalaryEntry, "id" | "createdAt"> = {
 };
 
 export default function SalaryPage() {
-  const [salaries, setSalaries] = useState<SalaryEntry[]>(initialSalaries);
+  const [salaries, setSalaries] = useState<SalaryEntry[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptySalary);
+
+  useEffect(() => {
+    apiRequest<ListResponse<SalaryEntry>>("/api/salaries?pageSize=200")
+      .then((data) =>
+        setSalaries(
+          data.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        )
+      )
+      .catch((error) => console.error("Unable to load salaries", error));
+  }, []);
 
   const totals = useMemo(
     () => ({
@@ -71,15 +86,14 @@ export default function SalaryPage() {
     [salaries]
   );
 
-  function saveSalary(event: React.FormEvent<HTMLFormElement>) {
+  async function saveSalary(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const saved = await apiRequest<SalaryEntry>("/api/salaries", {
+      method: "POST",
+      body: JSON.stringify({ ...form, amount: Number(form.amount), source: "MANUAL" })
+    });
     setSalaries((current) => [
-      {
-        ...form,
-        id: `sal-${Date.now()}`,
-        amount: Number(form.amount),
-        createdAt: new Date().toISOString()
-      },
+      { ...saved, date: apiDate(saved.date), amount: Number(saved.amount) },
       ...current
     ]);
     setForm(emptySalary);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HandCoins, Plus, ReceiptText, Search, Users } from "lucide-react";
 import { SummaryCard } from "@/components/dashboard/summary-card";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +31,9 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { initialPurchases, initialSalaries, sumBy } from "@/lib/data";
+import { sumBy } from "@/lib/data";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
+import type { PurchaseEntry, SalaryEntry } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 const all = "all";
@@ -50,8 +52,12 @@ type ExpenseRow = {
   createdAt: string;
 };
 
-const importedExpenses: ExpenseRow[] = [
-  ...initialPurchases.map(
+function combinedExpenses(
+  purchases: PurchaseEntry[],
+  salaries: SalaryEntry[]
+): ExpenseRow[] {
+  return [
+  ...purchases.map(
     (purchase): ExpenseRow => ({
       id: purchase.id,
       date: purchase.date,
@@ -66,7 +72,7 @@ const importedExpenses: ExpenseRow[] = [
       createdAt: purchase.createdAt
     })
   ),
-  ...initialSalaries.map(
+  ...salaries.map(
     (salary): ExpenseRow => ({
       id: salary.id,
       date: salary.date,
@@ -86,7 +92,8 @@ const importedExpenses: ExpenseRow[] = [
     b.date.localeCompare(a.date) ||
     b.createdAt.localeCompare(a.createdAt) ||
     b.id.localeCompare(a.id)
-);
+  );
+}
 
 const emptyExpense = {
   date: new Date().toISOString().slice(0, 10),
@@ -100,6 +107,8 @@ const emptyExpense = {
 };
 
 export default function ExpensesPage() {
+  const [purchases, setPurchases] = useState<PurchaseEntry[]>([]);
+  const [salaries, setSalaries] = useState<SalaryEntry[]>([]);
   const [manualExpenses, setManualExpenses] = useState<ExpenseRow[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyExpense);
@@ -107,6 +116,46 @@ export default function ExpensesPage() {
   const [type, setType] = useState(all);
   const [shift, setShift] = useState(all);
   const [search, setSearch] = useState("");
+  useEffect(() => {
+    Promise.all([
+      apiRequest<ListResponse<PurchaseEntry & { supplierName: string }>>(
+        "/api/purchases?pageSize=200"
+      ),
+      apiRequest<ListResponse<SalaryEntry>>("/api/salaries?pageSize=200"),
+      apiRequest<ListResponse<ExpenseRow>>("/api/expenses?pageSize=200")
+    ])
+      .then(([purchaseData, salaryData, expenseData]) => {
+        setPurchases(
+          purchaseData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            supplier: item.supplierName,
+            amount: Number(item.amount),
+            quantity: Number(item.quantity)
+          }))
+        );
+        setSalaries(
+          salaryData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            amount: Number(item.amount)
+          }))
+        );
+        setManualExpenses(
+          expenseData.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            type: "Other",
+            amount: Number(item.amount)
+          }))
+        );
+      })
+      .catch((error) => console.error("Unable to load expenses", error));
+  }, []);
+  const importedExpenses = useMemo(
+    () => combinedExpenses(purchases, salaries),
+    [purchases, salaries]
+  );
   const expenses = useMemo(
     () =>
       [...manualExpenses, ...importedExpenses].sort(
@@ -115,7 +164,7 @@ export default function ExpensesPage() {
           b.createdAt.localeCompare(a.createdAt) ||
           b.id.localeCompare(a.id)
       ),
-    [manualExpenses]
+    [importedExpenses, manualExpenses]
   );
   const filteredExpenses = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -144,16 +193,22 @@ export default function ExpensesPage() {
     (expense) => expense.amount
   );
 
-  function saveExpense(event: React.FormEvent<HTMLFormElement>) {
+  async function saveExpense(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const createdAt = new Date().toISOString();
+    const saved = await apiRequest<ExpenseRow>("/api/expenses", {
+      method: "POST",
+      body: JSON.stringify({
+        ...form,
+        amount: Number(form.amount),
+        source: "MANUAL"
+      })
+    });
     setManualExpenses((current) => [
       {
-        ...form,
-        id: `expense-${Date.now()}`,
+        ...saved,
+        date: apiDate(saved.date),
         type: "Other",
-        amount: Number(form.amount),
-        createdAt
+        amount: Number(saved.amount)
       },
       ...current
     ]);

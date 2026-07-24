@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Store } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,12 +13,32 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { getSupplierSummaries, initialPurchases } from "@/lib/data";
+import { getSupplierSummaries } from "@/lib/data";
+import { apiDate, apiRequest, type ListResponse } from "@/lib/client-api";
+import type { PurchaseEntry } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function SuppliersPage() {
   const [search, setSearch] = useState("");
-  const suppliers = useMemo(() => getSupplierSummaries(initialPurchases), []);
+  const [purchases, setPurchases] = useState<PurchaseEntry[]>([]);
+  useEffect(() => {
+    apiRequest<ListResponse<PurchaseEntry & { supplierName: string }>>(
+      "/api/purchases?pageSize=200"
+    )
+      .then((data) =>
+        setPurchases(
+          data.items.map((item) => ({
+            ...item,
+            date: apiDate(item.date),
+            supplier: item.supplierName,
+            quantity: Number(item.quantity),
+            amount: Number(item.amount)
+          }))
+        )
+      )
+      .catch((error) => console.error("Unable to load suppliers", error));
+  }, []);
+  const suppliers = useMemo(() => getSupplierSummaries(purchases), [purchases]);
   const filteredSuppliers = useMemo(() => {
     const query = search.trim().toLowerCase();
 

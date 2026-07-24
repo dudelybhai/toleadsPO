@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { UserMenu } from "@/components/user-menu";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -79,7 +80,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </button>
               <div className="hidden rounded-md border bg-secondary px-2 py-1 text-xs text-muted-foreground md:block">
-                Local JSON
+                Neon PostgreSQL
               </div>
             </div>
             <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:hidden">
@@ -114,9 +115,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <button className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-white shadow-sm">
                 <Bell className="h-4 w-4 text-muted-foreground" />
               </button>
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                TS
-              </div>
+              <UserMenu />
             </div>
           </div>
         </header>

@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ExternalLink, FileText, Files, Search } from "lucide-react";
+import { Download, ExternalLink, FileText, Files, Search, Upload } from "lucide-react";
 import pdfIndex from "@/data/pdf-index.json";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { apiRequest } from "@/lib/client-api";
 import {
   Table,
   TableBody,
@@ -35,6 +37,7 @@ function formatFileSize(bytes: number) {
 
 export default function DataPage() {
   const [search, setSearch] = useState("");
+  const [importStatus, setImportStatus] = useState("");
   const filteredDocuments = useMemo(() => {
     const query = search.trim().toLowerCase();
     return query
@@ -52,8 +55,62 @@ export default function DataPage() {
     0
   );
 
+  async function importWorkbook(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setImportStatus("Validating and importing...");
+    const form = new FormData();
+    form.append("file", file);
+    try {
+      const result = await apiRequest<{
+        imported: { purchases: number; salaries: number; sales: number };
+      }>("/api/import/excel", { method: "POST", body: form });
+      setImportStatus(
+        `Imported ${result.imported.purchases} purchases, ${result.imported.salaries} salaries, and ${result.imported.sales} sales.`
+      );
+    } catch (error) {
+      setImportStatus(error instanceof Error ? error.message : "Import failed.");
+    } finally {
+      event.target.value = "";
+    }
+  }
+
   return (
     <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Excel Data Transfer</CardTitle>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Import the completed master template or export the current database.
+          </p>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-3">
+          <Button asChild>
+            <label className="cursor-pointer">
+              <Upload className="h-4 w-4" />
+              Import Excel
+              <input
+                type="file"
+                accept=".xlsx"
+                className="hidden"
+                onChange={importWorkbook}
+              />
+            </label>
+          </Button>
+          <Button variant="outline" asChild>
+            <a href="/api/export/excel">
+              <Download className="h-4 w-4" />
+              Export Excel
+            </a>
+          </Button>
+          {importStatus && (
+            <p className="basis-full text-sm text-muted-foreground">
+              {importStatus}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="flex items-center gap-4 pt-5">
