@@ -4,19 +4,21 @@ import { nextCookies } from "better-auth/next-js";
 import { dash } from "@better-auth/infra";
 import { prisma } from "@/lib/prisma";
 
-const isProductionBuild =
-  process.env.NEXT_PHASE === "phase-production-build";
+function requiredEnvironment(name: "BETTER_AUTH_URL" | "BETTER_AUTH_SECRET") {
+  const value = process.env[name]?.trim();
+  if (!value || value.includes("replace-with")) {
+    throw new Error(`${name} is missing or still uses a placeholder value.`);
+  }
+  if (name === "BETTER_AUTH_SECRET" && value.length < 32) {
+    throw new Error("BETTER_AUTH_SECRET must contain at least 32 characters.");
+  }
+  return value;
+}
 
 export const auth = betterAuth({
   appName: "Toleads PO Dashboard",
-  baseURL:
-    process.env.BETTER_AUTH_URL ??
-    (isProductionBuild ? "http://localhost:3000" : undefined),
-  secret:
-    process.env.BETTER_AUTH_SECRET ??
-    (isProductionBuild
-      ? "build-only-secret-not-used-by-the-running-application"
-      : undefined),
+  baseURL: requiredEnvironment("BETTER_AUTH_URL"),
+  secret: requiredEnvironment("BETTER_AUTH_SECRET"),
   database: prismaAdapter(prisma, {
     provider: "postgresql"
   }),
