@@ -31,12 +31,14 @@ Use Node.js 22 as specified in `package.json`.
 ```bash
 npm install
 npm run db:generate
-npm run db:deploy
-npm run db:seed
+npm run db:deploy:local
+npm run db:seed:local
 npm run dev
 ```
 
 `db:seed` creates the open accounting period beginning 1 July 2026.
+Use the non-`local` database commands in deployment environments where
+`DATABASE_URL` and `DIRECT_URL` are supplied by the platform.
 
 For local UI work before Better Auth is configured, set
 `ALLOW_INSECURE_LOCAL_DEV="true"`. Never enable this in production.

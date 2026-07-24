@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "clean": "rm -rf .next .next-dev .next-build",
     "index:pdfs": "node scripts/index-pdfs.mjs",
@@ -15,7 +15,9 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
+    "db:deploy:local": "dotenv -e .env.local -- prisma migrate deploy",
     "db:seed": "prisma db seed",
+    "db:seed:local": "dotenv -e .env.local -- prisma db seed",
     "db:studio": "prisma studio"
   },
   "prisma": {
@@ -47,6 +49,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.11",
     "postcss": "^8.5.22",
