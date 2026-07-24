@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { dash } from "@better-auth/infra";
 import { prisma } from "@/lib/prisma";
 
 const isProductionBuild =
@@ -42,7 +43,12 @@ export const auth = betterAuth({
       }
     }
   },
-  plugins: [nextCookies()]
+  plugins: [
+    ...(process.env.BETTER_AUTH_API_KEY
+      ? [dash({ apiKey: process.env.BETTER_AUTH_API_KEY })]
+      : []),
+    nextCookies()
+  ]
 });
 
 export type AuthSession = typeof auth.$Infer.Session;

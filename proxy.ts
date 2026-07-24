@@ -2,10 +2,6 @@ import { getSessionCookie } from "better-auth/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
-  if (!process.env.BETTER_AUTH_SECRET) {
-    return NextResponse.next();
-  }
-
   const hasSessionCookie = Boolean(getSessionCookie(request));
   const { pathname } = request.nextUrl;
   const isAuthPage =

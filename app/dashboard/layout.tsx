@@ -8,9 +8,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (process.env.BETTER_AUTH_SECRET && process.env.DATABASE_URL) {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/sign-in");
-  }
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) redirect("/sign-in");
   return <AppShell>{children}</AppShell>;
 }

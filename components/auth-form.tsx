@@ -17,15 +17,16 @@ export function AuthForm({
   allowSignUp?: boolean;
 }) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const isSignUp = mode === "sign-up";
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
     setPending(true);
     setError("");
     try {
@@ -76,8 +77,8 @@ export function AuthForm({
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
+                name="name"
+                autoComplete="name"
                 required
               />
             </div>
@@ -86,9 +87,9 @@ export function AuthForm({
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
               required
             />
           </div>
@@ -96,10 +97,10 @@ export function AuthForm({
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               minLength={10}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              autoComplete={isSignUp ? "new-password" : "current-password"}
               required
             />
           </div>

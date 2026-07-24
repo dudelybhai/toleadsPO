@@ -24,6 +24,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@better-auth/infra": "^0.3.7",
     "@better-auth/prisma-adapter": "^1.6.25",
     "@prisma/adapter-pg": "^6.19.2",
     "@prisma/client": "^6.19.2",
