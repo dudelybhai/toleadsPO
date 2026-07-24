@@ -28,16 +28,35 @@ export function AuthForm({
     event.preventDefault();
     setPending(true);
     setError("");
-    const result = isSignUp
-      ? await authClient.signUp.email({ name, email, password })
-      : await authClient.signIn.email({ email, password });
-    setPending(false);
-    if (result.error) {
-      setError(result.error.message ?? "Authentication failed.");
-      return;
+    try {
+      const result = isSignUp
+        ? await authClient.signUp.email({ name, email, password })
+        : await authClient.signIn.email({ email, password });
+      if (result.error) {
+        const authError = result.error as {
+          message?: string;
+          statusText?: string;
+          code?: string;
+        };
+        setError(
+          authError.message ||
+            authError.statusText ||
+            authError.code ||
+            "Authentication failed. Check the server configuration."
+        );
+        return;
+      }
+      router.push("/dashboard");
+      router.refresh();
+    } catch (submissionError) {
+      setError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : "Unable to reach the authentication server."
+      );
+    } finally {
+      setPending(false);
     }
-    router.push("/dashboard");
-    router.refresh();
   }
 
   return (
